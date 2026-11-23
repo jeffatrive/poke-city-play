@@ -1,7 +1,7 @@
 // Poké City on its own page: plays game.riv full-window and keeps the city in this browser (localStorage).
 //
 // The save. The Rive runtime has no storage, so the game keeps the whole city (who lives on which lot,
-// friendship hearts, decorations, time of day) in one string, CityVM `save` ("PC1;..."). The game reads it
+// friendship hearts, decorations, time of day) in one string, CityVM `save` ("PC<version>;..."). The game reads it
 // once on its first frame and rewrites it when something changes (and every 20 s). This page hands the stored
 // string over before that first frame and copies every change back.
 //
@@ -16,7 +16,7 @@
 
   function readStored() { try { return localStorage.getItem(SAVE_KEY) || ''; } catch (e) { return ''; } }
   function writeStored(v) { try { if (v) localStorage.setItem(SAVE_KEY, v); else localStorage.removeItem(SAVE_KEY); } catch (e) {} }
-  function isSave(v) { return typeof v === 'string' && v.indexOf('PC1;') === 0; }
+  function isSave(v) { return typeof v === 'string' && /^PC[0-9]+;/.test(v); }
 
   var params = new URLSearchParams(location.search);
   if (params.get('reset') === '1') {
